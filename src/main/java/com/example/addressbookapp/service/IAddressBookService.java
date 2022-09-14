@@ -19,9 +19,11 @@ public interface IAddressBookService {
 
     List<AddressBook> getUserByEmail(String email);
 
+
     List<AddressBook> getUserByCity(String city);
 
     List<AddressBook> getUserByState(String state);
 
     List<AddressBook> getUserByZip(String zip);
+
 }

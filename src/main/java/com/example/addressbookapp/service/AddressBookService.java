@@ -65,6 +65,7 @@ public class AddressBookService implements IAddressBookService {
         return repository.findUserByEmail(email);
     }
 
+
     @Override
     public List<AddressBook> getUserByCity(String city) {
         return repository.findUserByCity(city);
@@ -78,4 +79,5 @@ public class AddressBookService implements IAddressBookService {
     @Override
     public List<AddressBook> getUserByZip(String zip) {
         return repository.findUserByZip(zip);    }
+
 }

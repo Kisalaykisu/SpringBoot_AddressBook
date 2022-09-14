@@ -26,7 +26,11 @@ public class AddressBookController {
 
     //Adding data
     @PostMapping("/post")
+<<<<<<< HEAD
         public ResponseEntity<ResponseDTO> addUserDataById(@Valid @RequestBody AddressBookDTO addressBookData) {
+=======
+        public ResponseEntity<ResponseDTO> addUserData(@Valid @RequestBody AddressBookDTO addressBookData) {
+>>>>>>> SearchByEmailAddress
         AddressBook response = service.saveData(addressBookData);
         ResponseDTO responseDTO = new ResponseDTO("Data Added Successfully", Optional.ofNullable(response));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
@@ -34,9 +38,9 @@ public class AddressBookController {
 
     //get data by id
     @GetMapping("/id/{id}")
-    public ResponseEntity<ResponseDTO> getUserData(@PathVariable Long id) {
+    public ResponseEntity<ResponseDTO> getEmpData(@PathVariable Long id) {
         Optional<AddressBook> addressBookData = service.findById(id);
-        ResponseDTO respDTO= new ResponseDTO("User Data with ID: " + id, addressBookData);
+        ResponseDTO respDTO= new ResponseDTO("User details by ID", addressBookData);
         return new ResponseEntity<>(respDTO, HttpStatus.OK);
     }
 
@@ -49,7 +53,7 @@ public class AddressBookController {
     }
     //Edit or Update the data by id
     @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseDTO> updateUserData(@PathVariable Long id,@Valid @RequestBody AddressBookDTO addressBookDTO) {
+    public ResponseEntity<ResponseDTO> updateEmpData(@PathVariable Long id,@Valid @RequestBody AddressBookDTO addressBookDTO) {
         Optional<AddressBook> userData = Optional.ofNullable(service.editData(addressBookDTO, id));
         ResponseDTO respDTO= new ResponseDTO("Data Update info", userData);
         return new ResponseEntity<>(respDTO, HttpStatus.OK);
@@ -57,9 +61,13 @@ public class AddressBookController {
 
     //Delete the data by id
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity <ResponseDTO> deleteUserData(@PathVariable Long id) {
+    public ResponseEntity <ResponseDTO> deleteEmpData(@PathVariable Long id) {
         service.deleteData(id);
+<<<<<<< HEAD
         ResponseDTO respDTO= new ResponseDTO("Deleted Successfully", "Deleted User ID: " + id);
+=======
+        ResponseDTO respDTO= new ResponseDTO("Deleted Successfully", "Deleted User id: " + id);
+>>>>>>> SearchByEmailAddress
         return new ResponseEntity<>(respDTO, HttpStatus.OK);
     }
 
@@ -67,6 +75,7 @@ public class AddressBookController {
     @GetMapping("/email/{email}")
     public ResponseEntity <ResponseDTO> getUserByEmail(@PathVariable String email) {
         List<AddressBook> userDataList = service.getUserByEmail(email);
+<<<<<<< HEAD
         ResponseDTO respDTO = new ResponseDTO("User Data with Email Address: " + email, userDataList);
         return new ResponseEntity<>(respDTO, HttpStatus.OK);
     }
@@ -94,4 +103,9 @@ public class AddressBookController {
         ResponseDTO respDTO = new ResponseDTO("User Data with Zip Code: " + zip, userDataList);
         return new ResponseEntity<>(respDTO, HttpStatus.OK);
     }
+=======
+        ResponseDTO respDTO = new ResponseDTO("Get Data By Email Address", userDataList);
+        return new ResponseEntity<>(respDTO, HttpStatus.OK);
+    }
+>>>>>>> SearchByEmailAddress
 }
