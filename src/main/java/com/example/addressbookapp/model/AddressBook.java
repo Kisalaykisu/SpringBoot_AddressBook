@@ -24,7 +24,7 @@ public @Data class AddressBook {
     String contactNumber;
     @ElementCollection
     @CollectionTable(name = "Email_Address", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "email")
+    @Column(name = "emails")
     List<String> emailAddress;
 
     public AddressBook(AddressBookDTO addressBookData) {
