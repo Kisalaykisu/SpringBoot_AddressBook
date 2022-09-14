@@ -17,7 +17,7 @@ public @ToString class AddressBookDTO {
     @NotEmpty(message="Address Cannot be Empty")
     String address;
     @NotEmpty(message="City Cannot be Empty")
-    List<String> city;
+    String city;
     @NotEmpty(message="State Cannot be Empty")
     String state;
     @Pattern(regexp = "^[1-9]{1}[0-9]{5}$", message="Invalid Zip Code(First digit is non-zero, Should be 6 digit), example: 234098")
@@ -25,6 +25,5 @@ public @ToString class AddressBookDTO {
     @Pattern(regexp = "^[1-9]{2}[0-9]{10}$", message="Invalid Contact Number(Should have Country Code and must be 10 digit number) example: 919234567890")
     String contactNumber;
     @NotEmpty(message="Email Address Cannot be Empty")
-    //List<String> emailAddress;
-    String emailAddress;
+    List<String> emailAddress;
 }
