@@ -57,6 +57,4 @@ public class TokenUtility {
         return userid;
 
     }
-
-
 }

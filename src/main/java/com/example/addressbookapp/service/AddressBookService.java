@@ -4,6 +4,7 @@ import com.example.addressbookapp.dto.AddressBookDTO;
 import com.example.addressbookapp.exception.AddressBookException;
 import com.example.addressbookapp.model.AddressBook;
 import com.example.addressbookapp.repo.Repo;
+import com.example.addressbookapp.utility.EmailSenderService;
 import com.example.addressbookapp.utility.TokenUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,22 +17,22 @@ public class AddressBookService implements IAddressBookService {
     Repo repository;
     @Autowired
     TokenUtility tokenUtility;
+    @Autowired
+    EmailSenderService emailSender;
 
     @Override
     public AddressBook saveData(AddressBookDTO addressBookData) {
         AddressBook addressBook = new AddressBook(addressBookData);
         return repository.save(addressBook);
     }
-
     @Override
     public Optional<AddressBook> findById(Long id) {
         Optional<AddressBook> getUserDetails = repository.findById(id);
         if (getUserDetails.isPresent()) {
             return getUserDetails;
         } else
-            throw new AddressBookException("ID does not exist " + id);
+            throw new AddressBookException("ID: "+id+", does not exist ");
     }
-
     @Override
     public List<AddressBook> findAllData() {
         return repository.findAll();
@@ -47,19 +48,28 @@ public class AddressBookService implements IAddressBookService {
             existingData.setZip(addressBookDTO.getZip());
             existingData.setContactNumber(addressBookDTO.getContactNumber());
             existingData.setEmailAddress(addressBookDTO.getEmailAddress());
+            //Email Body
+            String userData = "UPDATED DETAILS: \n"+"Full Name: "+existingData.getFullName()+"\n"+"Address: "+existingData.getAddress()+"\n"
+                    +"City: "+existingData.getCity()+"\n"+"State: "+existingData.getState()+"\n"+"Zip Code: "+existingData.getZip()+"\n"+
+                    "Contact Number: "+existingData.getContactNumber()+"\n"+"Email Address: "+existingData.getEmailAddress();
+            //sending email
+            emailSender.sendEmail(existingData.getEmailAddress(),"Data Edited!!!", userData);
+
             return repository.save(existingData);
         } else
             throw new AddressBookException("Error: Cannot find the User Id " + id);
     }
     @Override
-    public void deleteData(Long id) {
-    Optional<AddressBook> addressBookData = repository.findById(id);
-        if(addressBookData.isPresent()){
+    public AddressBook deleteData(Long id) {
+        AddressBook addressBookData = repository.findById(id).orElse(null);
+        if(addressBookData != null){
             repository.deleteById(id);
+            //sending email
+            emailSender.sendEmail(addressBookData.getEmailAddress(), "Data Deleted!!!", "Your Data deleted successfully from the AddressBookSystem App!!");
         }else
             throw new AddressBookException("Error: Cannot find User ID " + id);
+        return addressBookData;
     }
-
     @Override
     public List<AddressBook> getUserByEmail(String email) {
         List<AddressBook> existingData = repository.findUserByEmail(email);
@@ -68,7 +78,6 @@ public class AddressBookService implements IAddressBookService {
         }else
             return existingData;
     }
-
     @Override
     public List<AddressBook> getUserByCity(String city) {
         List<AddressBook> existingData = repository.findUserByCity(city);
@@ -77,7 +86,6 @@ public class AddressBookService implements IAddressBookService {
         }else
             return existingData;
     }
-
     @Override
     public List<AddressBook> getUserByState(String state) {
         List<AddressBook> existingData = repository.findUserByState(state);
@@ -86,7 +94,6 @@ public class AddressBookService implements IAddressBookService {
         }else
             return existingData;
     }
-
     @Override
     public List<AddressBook> getUserByZip(String zip) {
         List<AddressBook> existingData = repository.findUserByZip(zip);
@@ -95,14 +102,19 @@ public class AddressBookService implements IAddressBookService {
         }else
             return existingData;
     }
-
     @Override
     public String insertData(AddressBookDTO addressDto) throws AddressBookException {
-            AddressBook addressBook =new AddressBook(addressDto);
-            repository.save(addressBook);
-            String token = tokenUtility.createToken(addressBook.getUserId());
-            return token;
-        }
+        AddressBook addressBook =new AddressBook(addressDto);
+        repository.save(addressBook);
+        String token = tokenUtility.createToken(addressBook.getUserId());
+        //email body
+        String userData = "ADDED DETAILS: \n"+"Full Name: "+addressBook.getFullName()+"\n"+"Address: "+addressBook.getAddress()+"\n"
+                +"City: "+addressBook.getCity()+"\n"+"State: "+addressBook.getState()+"\n"+"Zip Code: "+addressBook.getZip()+"\n"+
+                "Contact Number: "+addressBook.getContactNumber()+"\n"+"Email Address: "+addressBook.getEmailAddress();
+        //sending email
+        emailSender.sendEmail(addressBook.getEmailAddress(),"Data Added!!!", userData);
+        return token;
+    }
     @Override
     public Optional<AddressBook> getUserDataByToken(String token) {
         Long Userid = tokenUtility.decodeToken(token);
@@ -112,7 +124,6 @@ public class AddressBookService implements IAddressBookService {
         }else
             throw new AddressBookException("Invalid Token");
     }
-
     @Override
     public List<AddressBook> getAllDataByToken(String token) {
         Long Userid = tokenUtility.decodeToken(token);
@@ -122,5 +133,15 @@ public class AddressBookService implements IAddressBookService {
             return existingAllData;
         }else
             throw new AddressBookException("Invalid Token");
+    }
+
+    @Override
+    public String getTokenDetails(Long id) {
+        AddressBook tokenDetails = repository.findById(id).orElse(null);
+        if(tokenDetails != null){
+            String token = tokenUtility.createToken(tokenDetails.getUserId());
+            return token;
+        }else
+            throw new AddressBookException("Error: Cannot find User ID " + id);
     }
 }

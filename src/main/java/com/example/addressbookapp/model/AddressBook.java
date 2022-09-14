@@ -25,10 +25,10 @@ public @Data class AddressBook {
     String state;
     String zip;
     String contactNumber;
-    @ElementCollection
-    @CollectionTable(name = "Email_Address", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "email")
-    List<String> emailAddress;
+//    @ElementCollection
+//    @CollectionTable(name = "Email_Address", joinColumns = @JoinColumn(name = "id"))
+//    @Column(name = "email")
+    String emailAddress;
 
     public AddressBook(AddressBookDTO addressBookData) {
 //        this.userId = addressBookData.getUserId();
