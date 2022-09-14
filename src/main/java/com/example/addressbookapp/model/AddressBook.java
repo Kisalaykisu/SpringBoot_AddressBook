@@ -18,13 +18,16 @@ public @Data class AddressBook {
     @Column(name = "Full_Name")
     String fullName;
     String address;
-    String city;
+    @ElementCollection
+    @CollectionTable(name = "Cities", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "city")
+    List<String> city;
     String state;
-    Long zip;
-    Long contactNumber;
+    String zip;
+    String contactNumber;
     @ElementCollection
     @CollectionTable(name = "Email_Address", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "emails")
+    @Column(name = "email")
     List<String> emailAddress;
 
     public AddressBook(AddressBookDTO addressBookData) {
