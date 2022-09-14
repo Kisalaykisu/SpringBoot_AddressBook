@@ -94,4 +94,30 @@ public class AddressBookController {
         ResponseDTO respDTO = new ResponseDTO("User Data with Zip Code: " + zip+", Total count: "+ userDataList.size(), userDataList);
         return new ResponseEntity<>(respDTO, HttpStatus.OK);
     }
+    //insert data using Utility layer and generated Token
+    @CrossOrigin
+    @PostMapping("/insert")
+    public ResponseEntity<String>AddAddressDetails(@Valid @RequestBody AddressBookDTO addressDto) {
+        String token = service.insertData(addressDto);
+        ResponseDTO respDTO = new ResponseDTO("Data Added Successfully", token);
+        return new ResponseEntity(respDTO, HttpStatus.CREATED);
+    }
+
+    //retrieve the User data with token value
+    @CrossOrigin
+    @GetMapping("/getUser/{token}")
+    public ResponseEntity<String>getUserDetails(@Valid @PathVariable String token){
+            Optional<AddressBook> userData = service.getUserDataByToken(token);
+            ResponseDTO respDTO = new ResponseDTO("Data retrieved successfully", userData);
+            return new ResponseEntity(respDTO, HttpStatus.OK);
+        }
+
+    //Get all the data with any Token
+    @CrossOrigin
+    @GetMapping("/getAll/{token}")
+    public ResponseEntity<String>getAllData(@Valid @PathVariable String token){
+        List<AddressBook> userData = service.getAllDataByToken(token);
+        ResponseDTO respDTO = new ResponseDTO("Data retrieved successfully", userData);
+        return new ResponseEntity(respDTO, HttpStatus.OK);
+    }
 }

@@ -24,4 +24,10 @@ public interface IAddressBookService {
     List<AddressBook> getUserByState(String state);
 
     List<AddressBook> getUserByZip(String zip);
+
+    String insertData(AddressBookDTO addressDto);
+
+    Optional<AddressBook> getUserDataByToken(String token);
+
+    List<AddressBook> getAllDataByToken(String token);
 }
