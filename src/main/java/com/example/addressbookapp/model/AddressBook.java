@@ -20,8 +20,8 @@ public @Data class AddressBook {
     String address;
     String city;
     String state;
-    String zip;
-    String contactNumber;
+    Long zip;
+    Long contactNumber;
     @ElementCollection
     @CollectionTable(name = "Email_Address", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "emails")
