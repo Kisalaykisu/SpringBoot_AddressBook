@@ -2,6 +2,8 @@ package com.example.addressbookapp.service;
 
 import com.example.addressbookapp.dto.AddressBookDTO;
 import com.example.addressbookapp.model.AddressBook;
+import com.example.addressbooksystem.dto.AddressBookDTO;
+import com.example.addressbooksystem.model.AddressBook;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,4 +14,10 @@ public interface IAddressBookService {
     Optional<AddressBook> findById(Long id);
 
     List<AddressBook> findAllData();
+
+    AddressBook editData(AddressBookDTO addressBookDTO, Long id);
+
+    AddressBook editData(AddressBookDTO addressBookDTO, Long id);
+
+    void deleteData(Long id);
 }

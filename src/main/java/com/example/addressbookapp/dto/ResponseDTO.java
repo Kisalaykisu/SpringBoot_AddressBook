@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Data
 @NoArgsConstructor
-
 public class ResponseDTO {
     String message;
     Object response;
@@ -19,16 +18,12 @@ public class ResponseDTO {
         this.response = response;
     }
 
-    public ResponseDTO(String message, AddressBook response) {
-        this.message = message;
-        this.response = response;
-    }
-
     public ResponseDTO(String message, Optional<AddressBook> response) {
         this.message = message;
         this.response = response;
     }
-
     public ResponseDTO(String message, List<AddressBook> response) {
+        this.message = message;
+        this.response = response;
     }
 }

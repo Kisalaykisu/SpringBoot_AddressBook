@@ -1,10 +1,9 @@
 package com.example.addressbookapp.controller;
 
-
 import com.example.addressbookapp.dto.AddressBookDTO;
 import com.example.addressbookapp.dto.ResponseDTO;
 import com.example.addressbookapp.model.AddressBook;
-import com.example.addressbookapp.service.AddressBookService;
+import com.example.addressbookapp.service.IAddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,22 +14,24 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/addressbook")
+@RequestMapping("/book")
 public class AddressBookController {
-    //welcome message
     @Autowired
-    AddressBookService service;
+    IAddressBookService service;
+    //welcome message
     @RequestMapping(value = {"", "/", "/home"}, method = RequestMethod.GET)
     public String greet() {
         return "Hello! This is Address Book Home Page";
     }
+
     //Adding data
-    @PostMapping("/insert")
-    public ResponseEntity<ResponseDTO> addUserData(@Valid @RequestBody AddressBookDTO addressBookData) {
+    @PostMapping("/post")
+        public ResponseEntity<ResponseDTO> addUserData(@Valid @RequestBody AddressBookDTO addressBookData) {
         AddressBook response = service.saveData(addressBookData);
-        ResponseDTO responseDTO = new ResponseDTO("Data Added Successfully",response);
+        ResponseDTO responseDTO = new ResponseDTO("Data Added Successfully", Optional.ofNullable(response));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
-    }
+        }
+
     //get data by id
     @GetMapping("/id/{id}")
     public ResponseEntity<ResponseDTO> getEmpData(@PathVariable Long id) {
@@ -44,6 +45,21 @@ public class AddressBookController {
     public ResponseEntity<ResponseDTO> findAllData() {
         List<AddressBook> userDataList = service.findAllData();
         ResponseDTO respDTO = new ResponseDTO("All User Details Data", userDataList);
+        return new ResponseEntity<>(respDTO, HttpStatus.OK);
+    }
+    //Edit or Update the data by id
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<ResponseDTO> updateEmpData(@PathVariable Long id,@Valid @RequestBody AddressBookDTO addressBookDTO) {
+        Optional<AddressBook> userData = Optional.ofNullable(service.editData(addressBookDTO, id));
+        ResponseDTO respDTO= new ResponseDTO("Data Update info", userData);
+        return new ResponseEntity<>(respDTO, HttpStatus.OK);
+    }
+
+    //Delete the data by id
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity <ResponseDTO> deleteEmpData(@PathVariable Long id) {
+        service.deleteData(id);
+        ResponseDTO respDTO= new ResponseDTO("Deleted Successfully", "Deleted User id: " + id);
         return new ResponseEntity<>(respDTO, HttpStatus.OK);
     }
 }

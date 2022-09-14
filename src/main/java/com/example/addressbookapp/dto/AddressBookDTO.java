@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
+
 @Data
 @NoArgsConstructor
-
 public @ToString class AddressBookDTO {
     @Pattern(regexp = "^[A-Z]{1}[a-zA-Z\\s]{2,}$", message="Invalid Name(First Letter Should be in Upper Case and min 3 Characters.)")
     String fullName;
